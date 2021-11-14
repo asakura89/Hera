@@ -1,17 +1,27 @@
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-builder.Services.AddRazorPages();
+using Hera.Core;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
-WebApplication app = builder.Build();
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
+WebApplicationBuilder webAppBuilder = WebApplication.CreateBuilder(args);
+webAppBuilder.Services.AddRazorPages();
+webAppBuilder.Services
+    .AddAuthentication(opts => {
+        opts.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        opts.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    })
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+
+WebApplication webApp = webAppBuilder.Build();
+if (!webApp.Environment.IsDevelopment()) {
+    webApp.UseExceptionHandler("/Error");
+    webApp.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
-app.UseAuthorization();
-app.MapRazorPages();
+webApp.UseHttpsRedirection();
+webApp.UseStaticFiles();
+webApp.UseRouting();
+webApp.UseAuthentication();
+webApp.UseAuthorization();
+webApp.MapRazorPages();
 
-app.Run();
+webApp.Run();

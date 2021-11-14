@@ -1,0 +1,25 @@
+﻿@page
+@model SignInModel
+@{
+    ViewData["Title"] = "Sign In";
+    Layout = "_SignInLayout";
+}
+
+<h2>Sign In</h2>
+
+<form class="form-horizontal" method="post" asp-page="SignIn" asp-page-handler="TrySignIn">
+    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+    <div class="input-group">
+        <label class="control-label" asp-for="RequestPayload.Username"></label>
+        <input type="text" class="form-control" autocomplete="off" asp-for="RequestPayload.Username" name="Username" />
+        <span class="text-danger" asp-validation-for="RequestPayload.Username"></span>
+    </div>
+    <div class="input-group">
+        <label class="control-label" asp-for="RequestPayload.Password"></label>
+        <input type="password" class="form-control" autocomplete="off" asp-for="RequestPayload.Password" name="Password" />
+        <span class="text-danger" asp-validation-for="RequestPayload.Password"></span>
+    </div>
+    <div class="input-group">
+        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Sign in</button>
+    </div>
+</form>

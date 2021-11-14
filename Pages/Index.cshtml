@@ -1,10 +1,12 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Dashboard";
+    ViewData["IsDashboardMenuActive"] = "active";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="jumbotron">
+    <h1>Hello, @Model.Username</h1>
+    <p>Welcome to Hera Web Apps. Click menu to look around.</p>
+    <a asp-page="Auth/SignIn" asp-page-handler="SignOut" class="btn btn-primary btn-lg" role="button">Logout</a>
 </div>

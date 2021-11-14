@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Hera.Pages;
+namespace Hera.Pages.Auth;
 
 public class IndexModel : PageModel {
     readonly ILogger<IndexModel> logger;
-
-    public String Username { get; set; }
 
     public IndexModel(ILogger<IndexModel> logger) {
         this.logger = logger;
@@ -16,7 +14,6 @@ public class IndexModel : PageModel {
         if (!HttpContext.User.Identity.IsAuthenticated)
             return RedirectToPage("/Auth/SignIn");
 
-        Username = HttpContext.User.Identity.Name;
-        return Page();
+        return RedirectToPage("/Index");
     }
 }

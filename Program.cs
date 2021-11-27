@@ -1,9 +1,15 @@
 using Hera.Core;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Builder;
 
 WebApplicationBuilder webAppBuilder = WebApplication.CreateBuilder(args);
-webAppBuilder.Services.AddRazorPages();
+webAppBuilder.Services.AddRazorPages(options => {
+    options.Conventions.AuthorizeFolder("/Attendance");
+    options.Conventions.AuthorizeFolder("/Employee");
+    options.Conventions.AuthorizeFolder("/Feedback");
+    options.Conventions.AuthorizeFolder("/Overtime");
+    options.Conventions.AuthorizeFolder("/Reimbursement");
+    options.Conventions.AuthorizeFolder("/Shift");
+});
 webAppBuilder.Services
     .AddAuthentication(opts => {
         opts.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;

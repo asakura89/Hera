@@ -1,20 +1,28 @@
 using System.Diagnostics;
+using System.Text;
 
 namespace Hera.Core {
-    public class ElapsedTimeMiddleware : IMiddleware
-    {
-        private readonly ILogger _logger;
-        public ElapsedTimeMiddleware(ILogger<ElapsedTimeMiddleware> logger) => _logger = logger;
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
-        {
+    public class ElapsedTimeMiddleware : IMiddleware {
+        private readonly ILogger logger;
+        public ElapsedTimeMiddleware(ILogger<ElapsedTimeMiddleware> logger) {
+            this.logger = logger;
+        }
+
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next) {
+            HttpRequest req = context.Request;
+            String requestInfo = new StringBuilder()
+                .Append(req.Protocol).Append(' ')
+                .Append(req.Method).Append(' ')
+                .Append(req.Scheme).Append(':')
+                .Append(req.Host.ToString())
+                .Append(req.Path.ToString())
+                .Append(req.QueryString.ToString())
+                .ToString();
+
             var sw = new Stopwatch();
             sw.Start();
             await next(context);
-            var isHtml = context.Response.ContentType?.ToLower().Contains("text/html");
-            if (context.Response.StatusCode == 200 && isHtml.GetValueOrDefault())
-            {
-                _logger.LogInformation($"{context.Request.Path} executed in {sw.ElapsedMilliseconds}ms");
-            }
+            logger.LogInformation($"{requestInfo} executed in {sw.ElapsedMilliseconds}ms");
         }
     }
 }

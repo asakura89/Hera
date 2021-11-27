@@ -12,11 +12,6 @@ public class IndexModel : PageModel {
 
     public async Task<IActionResult> OnGetAsync() => Page();
 
-    // public async Task<PartialViewResult> OnPostModalAsync() {
-    //     return Partial("_Request");
-    // }
-
-    public PartialViewResult OnPostModal() {
-        return Partial("_Request");
-    }
+    public async Task<PartialViewResult> OnPostRequestAsync() => Partial("_Request");
+    public async Task<PartialViewResult> OnGetRequestAsync() => Partial("_Request");
 }

@@ -50,11 +50,10 @@
 
             $("#request-button").on("click", null, function () {
                 $.ajax({
-                    type: "post",
-                    url: "/Overtime/Index/Modal",
+                    type: "GET",
+                    url: "/Overtime/Index?handler=Request",
                     success: function (data) {
-                        //$("#request-modal").html(data);
-                        console.log(data.text());
+                        $("#request-modal").html(data);
                     },
                     complete: function (data) { console.log(data); },
                     error: function (data) { console.log(data); }

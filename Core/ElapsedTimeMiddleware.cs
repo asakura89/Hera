@@ -13,7 +13,7 @@ namespace Hera.Core {
             String requestInfo = new StringBuilder()
                 .Append(req.Protocol).Append(' ')
                 .Append(req.Method).Append(' ')
-                .Append(req.Scheme).Append(':')
+                .Append(req.Scheme).Append("://")
                 .Append(req.Host.ToString())
                 .Append(req.Path.ToString())
                 .Append(req.QueryString.ToString())
@@ -22,7 +22,7 @@ namespace Hera.Core {
             var sw = new Stopwatch();
             sw.Start();
             await next(context);
-            logger.LogInformation($"{requestInfo} executed in {sw.ElapsedMilliseconds}ms");
+            logger.LogInformation($"{sw.ElapsedMilliseconds}ms: {requestInfo}");
         }
     }
 }

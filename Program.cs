@@ -26,6 +26,10 @@ if (!webApp.Environment.IsDevelopment()) {
     webApp.UseHsts();
 }
 
+webApp.Lifetime.ApplicationStarted.Register(OnAppStarted);
+webApp.Lifetime.ApplicationStopping.Register(OnAppStopping);
+webApp.Lifetime.ApplicationStopped.Register(OnAppStopped);
+
 webApp.UseHttpsRedirection();
 webApp.UseStaticFiles();
 webApp.UseRouting();
@@ -36,3 +40,16 @@ webApp.UseAuthorization();
 webApp.MapRazorPages();
 
 webApp.Run();
+
+
+void OnAppStarted() {
+    
+}
+
+void OnAppStopping() {
+    
+}
+
+void OnAppStopped() {
+    
+}

@@ -1,5 +1,6 @@
 using Hera.Core;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 
 WebApplicationBuilder webAppBuilder = WebApplication.CreateBuilder(args);
 webAppBuilder.Services.AddRazorPages();
@@ -10,6 +11,8 @@ webAppBuilder.Services
         opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     })
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+webAppBuilder.Services.AddScoped<ElapsedTimeMiddleware>();
+//webAppBuilder.Services.AddScoped<RouteDebuggerMiddleware>();
 
 WebApplication webApp = webAppBuilder.Build();
 if (!webApp.Environment.IsDevelopment()) {
@@ -20,6 +23,8 @@ if (!webApp.Environment.IsDevelopment()) {
 webApp.UseHttpsRedirection();
 webApp.UseStaticFiles();
 webApp.UseRouting();
+webApp.UseMiddleware<ElapsedTimeMiddleware>();
+//webApp.UseMiddleware<RouteDebuggerMiddleware>();
 webApp.UseAuthentication();
 webApp.UseAuthorization();
 webApp.MapRazorPages();

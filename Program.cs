@@ -17,8 +17,14 @@ webAppBuilder.Services
         opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     })
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
-webAppBuilder.Services.AddScoped<ElapsedTimeMiddleware>();
+webAppBuilder.Services.AddAntiforgery(opts => {
+    opts.SuppressXFrameOptionsHeader = false;
+    opts.HeaderName = "XSRF-TOKEN";
+});
+webAppBuilder.Services.AddSession();
+//webAppBuilder.Services.AddScoped<ElapsedTimeMiddleware>();
 //webAppBuilder.Services.AddScoped<RouteDebuggerMiddleware>();
+webAppBuilder.Services.AddScoped<RequestDebuggerMiddleware>();
 
 WebApplication webApp = webAppBuilder.Build();
 if (!webApp.Environment.IsDevelopment()) {
@@ -33,23 +39,27 @@ webApp.Lifetime.ApplicationStopped.Register(OnAppStopped);
 webApp.UseHttpsRedirection();
 webApp.UseStaticFiles();
 webApp.UseRouting();
-webApp.UseMiddleware<ElapsedTimeMiddleware>();
-//webApp.UseMiddleware<RouteDebuggerMiddleware>();
 webApp.UseAuthentication();
 webApp.UseAuthorization();
+webApp.UseSession();
+//webApp.UseMiddleware<ElapsedTimeMiddleware>();
+//webApp.UseMiddleware<RouteDebuggerMiddleware>();
+webApp.UseMiddleware<RequestDebuggerMiddleware>();
 webApp.MapRazorPages();
 
 webApp.Run();
 
-
 void OnAppStarted() {
-    
+    ILogger logger = webApp.Services.GetService<ILogger<Program>>();
+    logger.LogInformation(nameof(OnAppStarted));
 }
 
 void OnAppStopping() {
-    
+    ILogger logger = webApp.Services.GetService<ILogger<Program>>();
+    logger.LogInformation(nameof(OnAppStopping));
 }
 
 void OnAppStopped() {
-    
+    ILogger logger = webApp.Services.GetService<ILogger<Program>>();
+    logger.LogInformation(nameof(OnAppStopped));
 }

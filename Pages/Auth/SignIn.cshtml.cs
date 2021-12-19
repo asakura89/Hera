@@ -17,7 +17,7 @@ public class SignInModel : PageModel {
         this.logger = logger;
     }
 
-    public async Task<IActionResult> OnGetAsync() => Page();
+    public async Task<IActionResult> OnGetAsync() => await Task.Run(Page);
 
     public async Task<IActionResult> OnPostTrySignInAsync(SignInRequest payload) {
         if (!ModelState.IsValid)
@@ -25,9 +25,9 @@ public class SignInModel : PageModel {
 
         var claims = new List<Claim> {
             new Claim(ClaimTypes.NameIdentifier, payload.Username),
-            new Claim(ClaimTypes.Name, "Admin"),
-            new Claim(ClaimTypes.Email, "admin@xample.com"),
-            new Claim(ClaimTypes.Role, "")
+            new Claim(ClaimTypes.Name, $"{payload.Username[0].ToString().ToUpperInvariant()}{payload.Username.Substring(1)}"),
+            new Claim(ClaimTypes.Email, $"{payload.Username.ToLowerInvariant()}@xample.com"),
+            new Claim(ClaimTypes.Role, "Admin")
         };
 
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

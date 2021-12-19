@@ -12,7 +12,9 @@ namespace Hera.Core {
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next) {
             var provider = context.RequestServices.GetService<IActionDescriptorCollectionProvider>();
-            var data = provider.ActionDescriptors.Items
+            var data = provider
+                .ActionDescriptors
+                .Items
                 .Select(desc => new {
                     Area = desc.RouteValues.ContainsKey("area") ? desc.RouteValues["area"] : "",
                     Path = desc.DisplayName,
@@ -22,7 +24,14 @@ namespace Hera.Core {
                         .HandlerMethods
                         .Select(handler => new {
                             handler.HttpMethod,
-                            handler.Name
+                            handler.Name,
+                            Params = handler
+                                .Parameters
+                                .Select(hParam => new {
+                                    hParam.BindingInfo,
+                                    hParam.Name,
+                                    hParam.ParameterType.FullName
+                                })
                         }) : null
                 });
 

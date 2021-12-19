@@ -1,9 +1,10 @@
-@page "{handler?}"
+@page
 @model IndexModel
 @{
     ViewData["Title"] = "Overtime";
     ViewData["IsOvertimeMenuActive"] = "active";
 }
+@Html.AntiForgeryToken()
 
 <div class="row">
     <div class="col-md-4">
@@ -50,10 +51,15 @@
 
             $("#request-button").on("click", null, function () {
                 $.ajax({
-                    type: "GET",
+                    type: "POST",
                     url: "/Overtime/Index?handler=Request",
+                    headers: { "XSRF-TOKEN": $('input[name="__RequestVerificationToken"]').val() },
+                    /*beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },*/
                     success: function (data) {
                         $("#request-modal").html(data);
+                        $("#request-modal").modal();
                     },
                     complete: function (data) { console.log(data); },
                     error: function (data) { console.log(data); }

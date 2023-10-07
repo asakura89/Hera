@@ -1,5 +1,8 @@
 using Hera.Core;
+using Hera.Modules.Employee.Data;
+using Hera.Modules.Employee.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 
 WebApplicationBuilder webAppBuilder = WebApplication.CreateBuilder(args);
 webAppBuilder.Services.AddRazorPages(options => {
@@ -17,10 +20,19 @@ webAppBuilder.Services
         opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     })
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+
 webAppBuilder.Services.AddAntiforgery(opts => {
     opts.SuppressXFrameOptionsHeader = false;
     opts.HeaderName = "XSRF-TOKEN";
 });
+
+webAppBuilder.Services.AddDbContext<EmployeeDbContext>(options =>
+    options.UseSqlite(webAppBuilder.Configuration.GetConnectionString("EmployeeDbContext"))
+);
+//webAppBuilder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+webAppBuilder.Services.AddScoped<FamilyMemberService>();
+
 webAppBuilder.Services.AddSession();
 //webAppBuilder.Services.AddScoped<ElapsedTimeMiddleware>();
 //webAppBuilder.Services.AddScoped<RouteDebuggerMiddleware>();
@@ -30,6 +42,18 @@ WebApplication webApp = webAppBuilder.Build();
 if (!webApp.Environment.IsDevelopment()) {
     webApp.UseExceptionHandler("/Error");
     webApp.UseHsts();
+}
+else {
+    webApp.UseDeveloperExceptionPage();
+    //webApp.UseMigrationsEndPoint();
+}
+
+using (IServiceScope scope = webApp.Services.CreateScope()) {
+    IServiceProvider services = scope.ServiceProvider;
+
+    EmployeeDbContext dbCtx = services.GetRequiredService<EmployeeDbContext>();
+    dbCtx.Database.EnsureCreated();
+    DbInitializer.Initialize(dbCtx);
 }
 
 webApp.Lifetime.ApplicationStarted.Register(OnAppStarted);

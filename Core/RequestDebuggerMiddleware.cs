@@ -1,10 +1,10 @@
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.AspNetCore.Razor.Hosting;
-using Newtonsoft.Json;
 
 namespace Hera.Core {
     public class RequestDebuggerMiddleware : IMiddleware {
@@ -110,7 +110,7 @@ namespace Hera.Core {
                 var provider = context.RequestServices.GetService<IActionDescriptorCollectionProvider>();
                 IReadOnlyList<ActionDescriptor> descriptors = provider.ActionDescriptors.Items;
                 IEnumerable<RequestDebugInfo> registeredRoutes = GetRegisteredRoutesFromActionDescriptors(descriptors);
-                dataInSession = JsonConvert.SerializeObject(registeredRoutes);
+                dataInSession = registeredRoutes.AsJson();
 
                 context.Session.SetString(sessionKey, dataInSession);
             }
@@ -119,7 +119,7 @@ namespace Hera.Core {
         }
 
         RequestDebugInfo FindRequestedRoute(String requested, String registered) {
-            var routes = JsonConvert.DeserializeObject<IEnumerable<RequestDebugInfo>>(registered);
+            var routes = JsonSerializer.Deserialize<IEnumerable<RequestDebugInfo>>(registered);
             RequestDebugInfo found = routes
                 .FirstOrDefault(route =>
                     route.Path == requested ||
@@ -140,10 +140,12 @@ namespace Hera.Core {
             String registered = GetOrGenerateRegisteredRoutes(context);
             Object found = FindRequestedRoute(context.Request.Path, registered);
 
-            logger.LogInformation("Request: {0}", JsonConvert.SerializeObject(new {
-                Requested = requested,
-                Registered = found
-            }, Formatting.Indented));
+            logger.LogInformation("Request: {0}",
+                new {
+                    Requested = requested,
+                    Registered = found
+                }
+                .AsIndentedJson());
 
             await next(context);
         }

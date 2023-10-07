@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Razor.Hosting;
-using Newtonsoft.Json;
 
 namespace Hera.Core {
     public class RouteDebuggerMiddleware : IMiddleware {
@@ -35,7 +34,7 @@ namespace Hera.Core {
                         }) : null
                 });
 
-            logger.LogInformation(JsonConvert.SerializeObject(data, Formatting.Indented));
+            logger.LogInformation(data.AsIndentedJson());
             await next(context);
         }
     }

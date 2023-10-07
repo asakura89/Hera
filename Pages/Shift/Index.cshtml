@@ -3,3 +3,28 @@
     ViewData["Title"] = "Shift";
     ViewData["IsShiftMenuActive"] = "active";
 }
+
+<div class="row">
+    <div class="col-xs-6">
+        <h2>
+            <strong class="text-black">@DateTime.Now.ToString("dddd")</strong> <span class="text-muted">@DateTime.Now.ToString("dd MMM yyyy")</span>
+        </h2>
+    </div>
+    <div class="col-xs-6">
+        <h2>
+            <span class="btn-group pull-right">
+                <button id="btn-prev" type="button" class="btn bg-light-gray">
+                    <span class="fa fa-angle-left"></span>
+                </button>
+                <button id="btn-today" type="button" class="btn bg-light-gray">Today</button>
+                <button id="btn-calendar" type="button" class="btn bg-light-gray">
+                    <span class="fa fa-calendar"></span>
+                </button>
+                <button id="btn-next" type="button" class="btn bg-light-gray">
+                    <span class="fa fa-angle-right"></span>
+                </button>
+            </span>
+        </h2>
+    </div>
+</div>
+

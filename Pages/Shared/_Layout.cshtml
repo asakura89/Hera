@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Hera.Components.Layout
+
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -7,22 +9,25 @@
         <link rel="stylesheet" href="~/css/bootstrap.min.css" />
         <link rel="stylesheet" href="~/css/site.css" />
 
+        <base href="~/" />
+        <component
+            type="typeof(Microsoft.AspNetCore.Components.Web.HeadOutlet)"
+            render-mode="ServerPrerendered" />
+
         @await RenderSectionAsync("Styles", required: false)
     </head>
     <body>
-        <div class="container">
-            <h2>@ViewData["Title"]</h2>
-
-            <ul class="nav nav-tabs">
-                <li class='@ViewData["IsDashboardMenuActive"]'><a asp-area="" asp-page="/Index">Dashboard</a></li>
-                <li class='@ViewData["IsEmployeeMenuActive"]'><a asp-area="" asp-page="/Employee/Index">Employee</a></li>
-                <li class='@ViewData["IsAttendanceMenuActive"]'><a asp-area="" asp-page="/Attendance/Index">Attendance</a></li>
-                <li class='@ViewData["IsShiftMenuActive"]'><a asp-area="" asp-page="/Shift/Index">Shift</a></li>
-                <li class='@ViewData["IsOvertimeMenuActive"]'><a asp-area="" asp-page="/Overtime/Index">Overtime</a></li>
-                <li class='@ViewData["IsReimbursementMenuActive"]'><a asp-area="" asp-page="/Reimbursement/Index">Reimbursement</a></li>
-                <li class='@ViewData["IsFeedbackMenuActive"]'><a asp-area="" asp-page="/Feedback/Index">Feedback</a></li>
-            </ul>
-        </div>
+        <component
+            type="typeof(Navigation)"
+            param-Title="@ViewBag.Title"
+            param-IsDashboardMenuActive="@ViewBag.IsDashboardMenuActive"
+            param-IsEmployeeMenuActive="@ViewBag.IsEmployeeMenuActive"
+            param-IsAttendanceMenuActive="@ViewBag.IsAttendanceMenuActive"
+            param-IsShiftMenuActive="@ViewBag.IsShiftMenuActive"
+            param-IsOvertimeMenuActive="@ViewBag.IsOvertimeMenuActive"
+            param-IsReimbursementMenuActive="@ViewBag.IsReimbursementMenuActive"
+            param-IsFeedbackMenuActive="@ViewBag.IsFeedbackMenuActive"
+            render-mode="ServerPrerendered" />
 
         <div class="container" style="margin-top: 20px;">
             <div id="info-message" class="alert-success">@if (TempData.ContainsKey("InfoMessage")) { @Html.Raw(TempData["InfoMessage"]); }</div>
@@ -40,6 +45,7 @@
         <script src="~/js/jquery.min.js"></script>
         <script src="~/js/bootstrap.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="_framework/blazor.server.js"></script>
 
         @await RenderSectionAsync("Scripts", required: false)
     </body>

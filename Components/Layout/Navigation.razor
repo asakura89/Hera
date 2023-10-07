@@ -1,0 +1,53 @@
+﻿<div class="container">
+    <h2>@Title</h2>
+
+    <ul class="nav nav-tabs">
+        <li class="@IsDashboardMenuActive">
+            <a href="/Index">Dashboard</a>
+        </li>
+        <li class="@IsEmployeeMenuActive">
+            <a href="/Employee/Index">Employee</a>
+        </li>
+        <li class="@IsAttendanceMenuActive">
+            <a href="/Attendance/Index">Attendance</a>
+        </li>
+        <li class="@IsShiftMenuActive">
+            <a href="/Shift/Index">Shift</a>
+        </li>
+        <li class="@IsOvertimeMenuActive">
+            <a href="/Overtime/Index">Overtime</a>
+        </li>
+        <li class="@IsReimbursementMenuActive">
+            <a href="/Reimbursement/Index">Reimbursement</a>
+        </li>
+        <li class="@IsFeedbackMenuActive">
+            <a href="/Feedback/Index">Feedback</a>
+        </li>
+    </ul>
+</div>
+
+@code {
+    [Parameter]
+    public String Title { get; set; }
+
+    [Parameter]
+    public String IsDashboardMenuActive { get; set; }
+
+    [Parameter]
+    public String IsEmployeeMenuActive { get; set; }
+
+    [Parameter]
+    public String IsAttendanceMenuActive { get; set; }
+
+    [Parameter]
+    public String IsShiftMenuActive { get; set; }
+
+    [Parameter]
+    public String IsOvertimeMenuActive { get; set; }
+
+    [Parameter]
+    public String IsReimbursementMenuActive { get; set; }
+
+    [Parameter]
+    public String IsFeedbackMenuActive { get; set; }
+}

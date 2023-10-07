@@ -1,0 +1,114 @@
+@using Hera.Modules.Employee.Service
+@using Hera.Modules.Employee.Data
+
+@inject FamilyMemberService familyMemberSvc
+
+<h1>Family Member</h1>
+
+@if (familyMembers == null) {
+    <p><em>Loading...</em></p>
+}
+else {
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Relationship</th>
+                        <th>Birthdate</th>
+                        <th>ID Type</th>
+                        <th>ID No</th>
+                        <th>Marital Status</th>
+                        <th>Gender</th>
+                        <th>Religion</th>
+                        <th>Job</th>
+                        <th>Address</th>
+                        <th>Add to Emergency Contact</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var member in familyMembers) {
+                        <tr>
+                            <td>@member.FullName</td>
+                            <td>@member.Relationship</td>
+                            <td>@member.Birthdate.ToShortDateString()</td>
+                            <td>@member.IDType</td>
+                            <td>@member.IDNo</td>
+                            <td>@member.MaritalStatus</td>
+                            <td>@member.Gender</td>
+                            <td>@member.Religion</td>
+                            <td>@member.Job</td>
+                            <td>@member.Address</td>
+                            <td>@(member.AddToEmergencyContact ? "Yes" : "No")</td>
+                            <td>
+                                <button class="btn btn-primary" @onclick="() => EditFamilyMember(member)">Edit</button> |
+                                <button class="btn btn-danger" @onclick="() => DeleteFamilyMember(member)">Delete</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (showAddButton) {
+                <button class="btn btn-success" @onclick="AddFamilyMember">Add New Member</button>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    IEnumerable<FamilyMember> familyMembers;
+    FamilyMember selectedMember;
+    Boolean showAddButton = true;
+    Boolean isEditMode = false;
+
+    protected override async Task OnInitializedAsync() {
+        familyMembers = familyMemberSvc.GetAllFamilyMembers();
+    }
+
+    void AddFamilyMember() {
+        selectedMember = new FamilyMember();
+
+        showAddButton = false;
+        isEditMode = false;
+    }
+
+    void EditFamilyMember(FamilyMember member) {
+        selectedMember = member;
+
+        showAddButton = false;
+        isEditMode = true;
+    }
+
+    async Task DeleteFamilyMember(FamilyMember member) {
+        @* var confirmed = await JSRuntime.InvokeAsync<Boolean>("confirm", $"Are you sure you want to delete {member.FullName}?");
+
+        if (confirmed) {
+            familyMemberSvc.DeleteFamilyMember(member);
+            familyMembers = familyMemberSvc.GetAllFamilyMembers();
+        } *@
+    }
+
+    @* async Task SavePerson()
+    {
+        if (isEditMode)
+        {
+            // Update the person entity in the service
+            await personService.UpdatePerson(selectedPerson);
+        }
+        else
+        {
+            // Add the person entity to the service
+            await personService.AddPerson(selectedPerson);
+        }
+
+        // Refresh the person list from the service
+        persons = await personService.GetAllPersons();
+
+        // Clear the selected person and show the add button
+        selectedPerson = null;
+        showAddButton = true;
+    } *@
+}
+

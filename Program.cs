@@ -13,6 +13,9 @@ webAppBuilder.Services.AddRazorPages(options => {
     options.Conventions.AuthorizeFolder("/Reimbursement");
     options.Conventions.AuthorizeFolder("/Shift");
 });
+
+webAppBuilder.Services.AddServerSideBlazor();
+
 webAppBuilder.Services
     .AddAuthentication(opts => {
         opts.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -70,6 +73,8 @@ webApp.UseSession();
 //webApp.UseMiddleware<RouteDebuggerMiddleware>();
 webApp.UseMiddleware<RequestDebuggerMiddleware>();
 webApp.MapRazorPages();
+webApp.MapBlazorHub();
+webApp.MapFallbackToPage("/_Host");
 
 webApp.Run();
 
